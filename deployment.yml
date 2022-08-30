@@ -1,35 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: helloworld
+  name: helloworld-deployment
 spec:
   selector:
     matchLabels:
       app: helloworld
-  replicas: 1 
-  template: 
+  replicas: 1
+  template:
     metadata:
       labels:
         app: helloworld
     spec:
       containers:
       - name: helloworld
-        image: karthequian/helloworld:latest
+    # enter the path to your image, be sure to include the correct region prefix    
+        image: <region-key>.ocir.io/<tenancy-namespace>/<repo-name>:<tag>
         ports:
         - containerPort: 80
+      imagePullSecrets:
+    # enter the name of the secret you created  
+      - name: <secret-name>
 ---
 apiVersion: v1
 kind: Service
 metadata:
- name: helloworld
+  name: helloworld-service
 spec:
- type: NodePort
- selector:
-   app: helloworld
- ports:
-   - name: client
-     protocol: TCP
-     port: 80
-     nodePort: 32080
- selector:
-   app: helloworld
+  type: LoadBalancer
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: helloworld
