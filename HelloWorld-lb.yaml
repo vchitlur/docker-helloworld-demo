@@ -1,7 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: helloworld-deployment
+  name: helloworld-deployment-<userid>
+  namespace: ns-<userid>
 spec:
   selector:
     matchLabels:
@@ -15,7 +16,7 @@ spec:
       containers:
       - name: helloworld
     # enter the path to your image, be sure to include the correct region prefix    
-        image: <region-key>.ocir.io/<tenancy-namespace>/<repo-name>:<tag>
+        image: <region-key>.ocir.io/<tenancy-namespace>/<repo-name>:<tag>-<userid>
         ports:
         - containerPort: 80
       imagePullSecrets:
@@ -25,7 +26,8 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: helloworld-service
+  name: helloworld-service-<userid>
+  namespace: ns-<userid>
 spec:
   type: LoadBalancer
   ports:
